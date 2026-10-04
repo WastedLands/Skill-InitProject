@@ -28,6 +28,12 @@ Implementation checks (proposed — add the real commands with the first impleme
 
 Run the runnable checks before every push. Do not claim CI runs checks that don't exist yet.
 
+## Verification record
+
+Dated entries: what was verified, how, and the result. Record the method (command run, manual check), the date, and what it established — and what it did **not** establish. A doc entry proves nothing about live behaviour until a verification entry backs it.
+
+- **{{DATE}}** — {{WHAT}}: {{METHOD}}. Result: {{RESULT}}. Did not establish: {{LIMIT}}
+
 ## Gotchas and lessons learned
 
 Dated log. Add an entry whenever something surprises you or costs time — future agents (and future you) will thank you.

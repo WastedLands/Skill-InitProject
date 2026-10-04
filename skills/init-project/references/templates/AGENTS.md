@@ -10,7 +10,10 @@ Working instructions for coding agents in this repository. Tool-independent: wri
 
 ## Source of truth, in order
 
-1. `{{PRIMARY_SPEC_PATH}}` — authoritative for product scope, contracts, semantics, limits, and acceptance criteria.
+1. **Product authority** — in this order:
+   - `docs/NORTH-STAR.md`: bounds the approved scope. A scope change updates it before any spec or code.
+   - The consolidated spec (`{{PRIMARY_SPEC_PATH}}`): what the product does today — the baseline.
+   - The active plan's delta (OpenSpec: the spec delta in `openspec/changes/<name>/`; lite: the in-progress section of the design doc): governs the work underway and is the implementer's contract.
 2. This file — repository mechanics and working conventions.
 3. `docs/decisions/*.md` — short numbered decision records for anything that departs from or refines the spec.
 4. Everything else.
@@ -37,6 +40,7 @@ Rules for both modes:
 
 ### Mode A — OpenSpec (default)
 
+- Run OpenSpec commands through the pinned wrapper `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@{{OPENSPEC_VERSION}}`, including commands shown with a bare `openspec` executable in generated integrations. Never rely on a global OpenSpec installation.
 - `openspec/specs/`: what the product does today, per capability, as requirements with WHEN/THEN scenarios. A spec describes current truth plus the active phase's delta, never a future phase. Every scenario ends with an `*Evidence:*` line naming the test that proves it, or `none yet` when nothing proves it yet.
 - `openspec/changes/<name>/`: the active phase's work. The spec delta is **what** it builds; `design.md` and `tasks.md` are **how**; the `tasks.md` checkboxes are its status. Archiving merges the delta into the specs.
 

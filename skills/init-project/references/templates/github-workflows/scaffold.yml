@@ -16,18 +16,15 @@ jobs:
         with:
           node-version: 24
       - name: No unfilled placeholders
+        # Canonical placeholder scan. Exit 0 when clean; exit 1 on
+        # placeholders or scan failure. grep exit 1 = no matches. Any other
+        # non-zero grep exit is a scan failure and must propagate — never
+        # filter matches through an exclusion pipeline.
         run: |
-          # grep exit 1 = no matches (clean). Any other non-zero exit is a
-          # scan failure and must propagate — never silently pass.
           if grep -rEn --include='*.md' --exclude-dir=.git --exclude-dir=node_modules '[{][{]' .; then
-            echo "Unfilled template placeholders found" >&2
-            exit 1
+            echo "Unfilled template placeholders found" >&2; exit 1
           else
-            code=$?
-            if [ "$code" -ne 1 ]; then
-              echo "Placeholder scan failed (grep exit $code)" >&2
-              exit "$code"
-            fi
+            code=$?; [ "$code" -eq 1 ] || { echo "Placeholder scan failed (grep exit $code)" >&2; exit 1; }
           fi
       # OPENSPEC-ONLY: delete the following two steps in planning-lite mode.
       - name: OpenSpec validate

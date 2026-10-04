@@ -6,7 +6,7 @@ license: MIT
 compatibility: Requires git and node/npx. The gh CLI is required for GitHub repo creation. OpenSpec is bootstrapped via npx (@fission-ai/openspec).
 metadata:
   author: WastedLands
-  version: 0.2.0
+  version: 0.3.0
 disable-model-invocation: true
 ---
 
@@ -121,9 +121,19 @@ After generation, do a final coverage review: walk the master template section b
 
 After writing, validate:
 
-- **Placeholders:** no `{{` may remain in any `*.md` file. Scan with the same robust check the generated workflow uses: `grep` exit 1 means clean; any other non-zero exit is a scan failure and must propagate (never filter matches through an exclusion pipeline).
+- **Placeholders:** no `{{` may remain in any `*.md` file. Run this exact scan locally — it is the same gate CI runs, and it exits 0 when clean (safe in `&&` chains and `set -e` scripts):
+  ```sh
+  if grep -rEn --include='*.md' --exclude-dir=.git --exclude-dir=node_modules '[{][{]' .; then
+    echo "Unfilled template placeholders found" >&2; exit 1
+  else
+    code=$?; [ "$code" -eq 1 ] || { echo "Placeholder scan failed (grep exit $code)" >&2; exit 1; }
+  fi
+  ```
+  (grep exit 1 = no matches, clean. Never filter matches through an exclusion pipeline.)
 - **Gitignore:** `git check-ignore` confirms secret patterns are ignored; `git ls-files` (after staging) confirms vendored skills/commands are trackable.
 - **OpenSpec mode:** `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 validate --all --strict` must pass (note: it passes vacuously on an empty scaffold — say so; it establishes structure, not behavior). Then `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 doctor --json` must produce **no stderr output**: both `validate` and `doctor` exit 0 while silently ignoring malformed config rules (e.g. an unquoted `: ` turning a rule into a mapping), and `doctor` reports those on stderr instead.
+
+When validation passes, mark the scaffold phase done in `docs/ROADMAP.md` (Status: done, with the validation date and method). Validation establishes the scaffold; the phase is not "current" once the checks are green.
 
 ### Phase 6 — Git & GitHub (gated)
 

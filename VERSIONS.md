@@ -4,9 +4,13 @@ Current versions of all skills. Agents can compare against local versions to che
 
 | Skill | Version | Last updated |
 |---|---|---|
-| init-project | 0.2.0 | 2026-10-04 |
+| init-project | 0.3.0 | 2026-10-04 |
 
 ## Changelog
+
+### 0.3.0 — 2026-10-04
+
+Second review round: one canonical placeholder scan used verbatim locally and in CI (exits 0 when clean); source-of-truth section rewritten as a consistent four-level authority (North Star bounds scope, consolidated spec is the baseline, active delta governs the work, AGENTS.md governs conventions); pinned OpenSpec wrapper instruction in the master template (`{{OPENSPEC_VERSION}}` placeholder); dated verification record section in the DEVELOPMENT template; scaffold phase marked done after validation passes.
 
 ### 0.2.0 — 2026-10-04
 
