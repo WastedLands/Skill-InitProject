@@ -163,6 +163,27 @@ if (existsSync(versionsPath)) {
   warn("VERSIONS.md is missing");
 }
 
+// --- plugin manifest versions stay in sync with the skill ---
+// `claude plugin update` compares the manifest version, not the skill's
+// metadata.version — if these drift, users silently keep a stale install.
+for (const mp of [".claude-plugin/plugin.json", "plugin.json"]) {
+  const mpPath = resolve(ROOT, mp);
+  if (existsSync(mpPath)) {
+    let parsed;
+    try {
+      parsed = JSON.parse(readFileSync(mpPath, "utf8"));
+    } catch {
+      err(`${mp}: invalid JSON`);
+      continue;
+    }
+    if (parsed.version !== fm.metadata?.version) {
+      err(`${mp}: version ${parsed.version ?? "missing"} != skill metadata.version ${fm.metadata?.version}`);
+    }
+  } else {
+    warn(`${mp} is missing`);
+  }
+}
+
 // --- report ---
 for (const w of warnings) console.log(`warning: ${w}`);
 for (const e of errors) console.log(`error: ${e}`);
