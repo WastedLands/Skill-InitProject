@@ -6,7 +6,7 @@ Working instructions for coding agents in this repository.
 
 **Skill-InitProject**: the `init-project` agent skill — an interview-driven scaffolder for new software projects. Ships as a Claude Code plugin (`wastedlands`), a Codex skill (`$init-project`), and via the WastedLands marketplace repo. The skill generates `AGENTS.md` for *other* projects; this repo's own conventions live here.
 
-**Status (2026-10-04):** draft 0.1.0, private. Not yet published to any directory.
+**Status (2026-10-05):** 1.0.0, stable. Validated by a full live interview on WastedLands/ReviPad.
 
 ## Source of truth, in order
 

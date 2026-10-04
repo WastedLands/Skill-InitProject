@@ -1,1 +1,19 @@
-{"$schema":"https://agent-plugins.org/schemas/1.0.0/plugin.schema.json","author":{"name":"WastedLands","url":"https://github.com/WastedLands"},"description":"WastedLands skills: interview-driven project scaffolding (init-project).","homepage":"https://github.com/WastedLands/Skill-InitProject","keywords":["scaffolding","project-init","agents-md","openspec"],"license":"MIT","name":"wastedlands","repository":"https://github.com/WastedLands/Skill-InitProject","version":"0.3.0"}
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "author": {
+    "name": "Henki Papp",
+    "url": "https://github.com/henkas"
+  },
+  "description": "Interview-driven project scaffolding: turn an idea into a fully-structured repo \u2014 AGENTS.md, docs, OpenSpec planning, CI \u2014 through a guided interview.",
+  "homepage": "https://wastedlands.dev",
+  "keywords": [
+    "scaffolding",
+    "project-init",
+    "agents-md",
+    "openspec"
+  ],
+  "license": "MIT",
+  "name": "wastedlands",
+  "repository": "https://github.com/WastedLands/Skill-InitProject",
+  "version": "1.0.0"
+}

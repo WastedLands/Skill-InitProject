@@ -4,9 +4,13 @@ Current versions of all skills. Agents can compare against local versions to che
 
 | Skill | Version | Last updated |
 |---|---|---|
-| init-project | 0.3.0 | 2026-10-04 |
+| init-project | 1.0.0 | 2026-10-05 |
 
 ## Changelog
+
+### 1.0.0 — 2026-10-05
+
+First stable release. Validated by a full live interview on a real project (WastedLands/ReviPad, Claude Code): draft reconciliation, stack proposal, inventory approvals, scaffold generation, and validation all exercised for real. Changes since 0.3.0: `CLAUDE.md` bridge optional when the client reads `AGENTS.md` natively; generic PR template (what/evidence/judgment calls/known gaps) added to the templates and Phase 5; plugin author/description/homepage polish. Plugin manifest versions are now validator-enforced in sync with the skill version.
 
 ### 0.3.0 — 2026-10-04
 

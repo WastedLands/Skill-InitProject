@@ -6,7 +6,7 @@ license: MIT
 compatibility: Requires git and node/npx. The gh CLI is required for GitHub repo creation. OpenSpec is bootstrapped via npx (@fission-ai/openspec).
 metadata:
   author: WastedLands
-  version: 0.3.0
+  version: 1.0.0
 disable-model-invocation: true
 ---
 
@@ -87,8 +87,8 @@ Proceed after the owner approves. If they counter-propose, adopt theirs and adju
 
 Before generating anything, present the exact file inventory for approval:
 
-- Every file to be created (with its planning-mode branch: `openspec/` vs `docs/DESIGN.md`). When Claude is a selected harness, include the `CLAUDE.md` bridge (`@AGENTS.md` one-liner).
-- `.github/workflows/scaffold.yml` — scaffold checks (placeholder scan; OpenSpec validation + config health in OpenSpec mode only).
+- Every file to be created (with its planning-mode branch: `openspec/` vs `docs/DESIGN.md`). When Claude is a selected harness, include the `CLAUDE.md` bridge (`@AGENTS.md` one-liner) unless their client reads `AGENTS.md` natively.
+- `.github/workflows/scaffold.yml` — scaffold checks (placeholder scan; OpenSpec validation + config health in OpenSpec mode only). `.github/pull_request_template.md` — the change template (what/evidence/judgment calls/known gaps).
 - `LICENSE` (per the interview's license choice), `.gitignore` (stack-appropriate subset).
 - Visibility for the GitHub repo step (private/public per the interview).
 - If project skills were requested: the concrete outputs — canonical `.claude/skills/<name>/`, mirror `.agents/skills/<name>/`, and a `skills.lock.json` entry — plus how consistency is checked.
@@ -107,7 +107,7 @@ Generate the approved files. Fill every `{{PLACEHOLDER}}` in the templates; dele
 
 After generation, do a final coverage review: walk the master template section by section and confirm every mandatory rule is present in the generated `AGENTS.md` or has an approved omission.
 
-1. `AGENTS.md` — from `references/templates/AGENTS.md`. Delete the planning-mode block that does not apply (OpenSpec vs lite). When Claude is among the selected harnesses, also write `CLAUDE.md` as a one-line `@AGENTS.md` bridge so Claude Code reads the same instructions.
+1. `AGENTS.md` — from `references/templates/AGENTS.md`. Delete the planning-mode block that does not apply (OpenSpec vs lite). When Claude is among the selected harnesses, also write `CLAUDE.md` as a one-line `@AGENTS.md` bridge — unless the interview establishes their Claude Code reads `AGENTS.md` natively (v2.1.277+), in which case the bridge is optional and the inventory records the decision.
 2. `docs/NORTH-STAR.md`, `docs/ROADMAP.md` — from templates, reconciled with interview + drafts.
 3. `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md` — skeleton with the "follows the code" rule and a seeded gotchas log.
 4. Planning mode branch:
@@ -116,7 +116,7 @@ After generation, do a final coverage review: walk the master template section b
 5. `LICENSE` — per the interview (default MIT).
 6. `.gitignore` — from `references/templates/gitignore-patterns.md`. The Common, Secrets, and harness-state sections are mandatory; stack selection applies only to the remaining sections. Do not paraphrase or trim the mandatory sections.
 7. `README.md` — one-paragraph pitch, status, pointer to `AGENTS.md` and `docs/`. Keep it short; it is not the spec.
-8. `.github/workflows/scaffold.yml` — from `references/templates/github-workflows/scaffold.yml`. In planning-lite mode, delete the `OPENSPEC-ONLY` step.
+8. `.github/workflows/scaffold.yml` — from `references/templates/github-workflows/scaffold.yml`. In planning-lite mode, delete the `OPENSPEC-ONLY` step. Also write `.github/pull_request_template.md` from `references/templates/github-pr-template.md` (What/Evidence/Judgment calls/Known gaps).
 9. If project skills were requested: scaffold the canonical skill, the harness mirror, and the `skills.lock.json` entry per the vendoring convention.
 
 After writing, validate:
