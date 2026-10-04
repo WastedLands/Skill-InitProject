@@ -37,11 +37,15 @@ Then run `/wastedlands:init-project`.
 ## Validation
 
 ```bash
-npx -y skills-ref validate skills/init-project   # spec conformance
-claude plugin validate --strict .                # Claude packaging (local)
+node scripts/validate-skill.mjs              # spec + repo conventions (hard gate)
+node scripts/validate-skill.mjs --strict     # warnings become errors
+npx -y skills-ref validate skills/init-project  # advisory only
+claude plugin validate --strict .            # Claude packaging (local)
 ```
 
-CI runs `skills-ref`. Before publishing, also do the manual round-trips: install from a local-path marketplace in Claude Code, and the marketplace-add round-trip in a throwaway Codex home.
+`skills-ref` flags `disable-model-invocation` as an unexpected frontmatter field. That field is Claude-Code-documented and intentional — it mirrors Codex's `allow_implicit_invocation: false` so this heavyweight interview skill never auto-fires. Our validator is the hard gate; `skills-ref` stays advisory.
+
+CI runs the hard gate. Before publishing, also do the manual round-trips: install from a local-path marketplace in Claude Code, and the marketplace-add round-trip in a throwaway Codex home.
 
 ## Status
 

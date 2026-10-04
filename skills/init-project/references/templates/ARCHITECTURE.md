@@ -1,6 +1,6 @@
 # Architecture: {{PROJECT_NAME}}
 
-What exists and runs today, plus the dated decisions in force. **This document follows the code**: the pull request that changes the architecture updates it. Nothing planned goes in it — plans live in `openspec/changes/` and `docs/ROADMAP.md`.
+What exists and runs today, plus the dated decisions in force. **This document follows the code**: the pull request that changes the architecture updates it. Nothing planned goes in it — plans live in `openspec/changes/` and `docs/ROADMAP.md`. The chosen stack is recorded in the active change's `design.md` until it is built; this file records what is actually running.
 
 ## Overview
 
@@ -16,7 +16,7 @@ Dated, load-bearing decisions. Newest first. Each: date, what was decided, why (
 
 - **{{DATE}}** — {{DECISION}}: {{WHY}}
 
-Superseded decisions are removed, not struck through — git history is the archive.
+Superseded decisions are removed, not struck through — git history is the archive. Investigation records that explain a decision live in `docs/investigation/` and are linked from the decision, not deleted as clutter.
 
 ## Invariants
 

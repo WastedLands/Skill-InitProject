@@ -16,26 +16,32 @@ Thumbs.db
 
 ## Secrets and local config (always)
 
+Precise patterns only. Broad globs like `*secret*` or `*credentials*` hide legitimate files (e.g. `tests/test_secrets.py`, `config/credentials.example.toml`) — don't use them.
+
 ```
 .env
 .env.*
 !.env.example
 *.pem
 *.key
-*secret*
-*credentials*
-.dev.vars
-.dev.vars.*
 ```
 
-Local harness integrations (project-local, never committed):
+## Agent harness local state (always)
+
+Keep vendored skills, ignore the rest. The negations below re-include the canonical skill dirs and their mirrors; everything else harness-local stays out.
 
 ```
-.agents/
 .claude/
+!.claude/skills/
+!.claude/skills/**
 .codex/
 .mcp.json
+.agents/
+!.agents/skills/
+!.agents/skills/**
 ```
+
+If the project intentionally commits a repo-scoped marketplace or other harness config, un-ignore that path explicitly with a comment saying why.
 
 ## Node / TypeScript
 

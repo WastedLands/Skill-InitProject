@@ -21,6 +21,10 @@ If code must diverge from the spec, record why in `docs/decisions/` and update t
 
 ## How the project is planned
 
+Two modes; the interview picks one and the other block is deleted.
+
+### Mode A — OpenSpec (default)
+
 - `docs/NORTH-STAR.md`: the end goal and the principles that do not change.
 - `docs/ROADMAP.md`: numbered phases. Past and current phases are committed. Every future phase is direction and may be rewritten by the pull request that learns something.
 - `openspec/specs/`: what the product does today, per capability, as requirements with WHEN/THEN scenarios. A spec describes current truth plus the active phase's delta, never a future phase. Every scenario ends with an `*Evidence:*` line naming the test that proves it, or `none yet` when nothing proves it yet.
@@ -36,12 +40,12 @@ Rules that follow from this:
 - **No document references a historical document** or says what it was derived from. Git history is the provenance. Folded-in files are deleted, not archived.
 - **Future phases are not promises.** Reorder, rescope, or drop them in the pull request that learns why.
 
-<!-- OPTIONAL: use instead of the OpenSpec block above when the project is small enough that a single design doc is more honest. Delete whichever does not apply. -->
-<!-- PLANNING-LITE:
-- `docs/DESIGN.md`: the single design doc — authoritative for scope, contracts, and acceptance criteria. Keep it current; it rots the moment it disagrees with the code.
-- `docs/ROADMAP.md`: numbered phases, as above. Past and current committed; future phases are direction.
-- `docs/ARCHITECTURE.md` and `docs/DEVELOPMENT.md`: as above.
--->
+### Mode B — Planning-lite (small projects)
+
+- `docs/DESIGN.md`: the single design doc — authoritative for scope, contracts, semantics, limits, and acceptance criteria. Keep it current; it rots the moment it disagrees with the code.
+- `docs/NORTH-STAR.md`, `docs/ROADMAP.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`: as in Mode A.
+
+Delete the mode that does not apply, including its rules above.
 
 ## Commands
 
@@ -95,7 +99,7 @@ Explicit prohibitions beat vague guidance. Name the tempting shortcuts by name.
 
 ## Secrets and credentials
 
-- Fail closed before any work when required credentials are absent or placeholders.
+- Fail closed before any operation that needs credentials: absent or placeholder credentials block that operation. They do not block unrelated development work.
 - Real credentials live in the deployment environment / secret store, never in the repo. Local dev credentials live in gitignored files (see `.gitignore`); never commit them.
 - Never log secret values or their hashes. Never echo them into errors, fixtures, or docs.
 
@@ -104,7 +108,7 @@ Explicit prohibitions beat vague guidance. Name the tempting shortcuts by name.
 Keep the suite small. Every test costs time to write and run at every step, so a test has to catch a real bug that the end-to-end tests would miss. Don't add tests just to cover each step.
 
 - **Write the test first and show that it fails without the change** (stash the implementation, run, pop).
-- **Prefer end-to-end tests.** A spec scenario in WHEN/THEN form is an E2E test by construction: write it as one. At the end of an E2E test, produce a verifiable, repeatable artifact.
+- **Prefer end-to-end tests.** A spec scenario in WHEN/THEN form is a natural E2E test: prefer writing it as one. (WHEN/THEN does not mandate E2E — a scenario is proven however its evidence line says.) At the end of an E2E test, produce a verifiable, repeatable artifact.
 - **If you must test a unit in isolation**, first write down the ways it can fail, then write the code.
 - {{TESTING_STACK_NOTES}} — e.g. deterministic vs live E2E policy, where secrets must never appear (CI has no secrets).
 
@@ -115,10 +119,11 @@ Keep the suite small. Every test costs time to write and run at every step, so a
 - **Tests as the definition of done.** A slice is complete when the gate is green, not when the code looks right.
 - **Documented vs verified.** A doc entry proves nothing about live behaviour. Record every verification with date and method.
 - **Decisions** that refine or depart from the spec get a short numbered file in `docs/decisions/`.
+- **Reference vs implementation.** Design snapshots, UI kits, and prototype exports are reference material, not code to import. Where a reference conflicts with approved content or the spec, the approved content wins — say so explicitly rather than silently following the reference.
 - **Style.** {{STYLE_RULES}} — e.g. absolute dates (`2026-10-04`), never "today"; comments explain why, not what.
 - **Commits.** {{COMMIT_CONVENTION}} — e.g. conventional prefixes, one logical change per commit, inspect the diff, never stage stray files.
 - **Publishing mindset.** The repo may be private now and published later. Anything committed must already be fit for a public repository.
-- **No archaeology.** When something is replaced, delete the old file. Git history is the archive; don't leave "superseded" copies.
+- **No archaeology, but keep the evidence.** When something is replaced, delete the obsolete duplicate — git history is the archive. But preserve investigation records and vendor references that explain *why* (e.g. `docs/investigation/`): a maintained technical record is not clutter. Distinguish "superseded copy" (delete) from "evidence for a decision" (keep, and link it from the decision record).
 
 ## Per-task workflow
 
@@ -127,6 +132,12 @@ Keep the suite small. Every test costs time to write and run at every step, so a
 3. Write or update contracts and fixtures, then tests, then implementation.
 4. Run the full local gate.
 5. Summarise what changed, what was verified (and how), and what is left open.
+
+<!-- OPTIONAL: include when the project needs a release-gate tracker. -->
+<!-- ACCEPTANCE MATRIX:
+`docs/acceptance-matrix.md` is the committed release-gate tracker: each row is a release criterion from the spec, with columns for state, evidence, and unresolved gaps. Update it with every slice. A criterion is met only when its evidence column says how.
+-->
+<!-- /OPTIONAL -->
 
 <!-- OPTIONAL: include when the project has vendored agent skills. -->
 <!-- SKILLS:
@@ -146,10 +157,13 @@ Changing a vendored skill: edit it under `.claude/skills/`, record the change in
 
 ## Git and CI
 
-- `main` is protected: pull requests, required checks, signed commits. Branch from `main`; keep one logical change per commit; don't force-push or merge — the owner merges.
+Status: {{GIT_CI_STATUS}} — e.g. "Configured: PR checks on push. Planned: branch protection, signed commits." A scaffold describes its actual initial state; anything not yet configured is listed as planned, not implied.
+
+- `main` is protected (recommended): pull requests, required checks, signed commits. Branch from `main`; keep one logical change per commit; don't force-push or merge — the owner merges.
 - Workflows use only GitHub-owned actions pinned to full commit SHAs. Never add `pull_request_target` or third-party actions. Tools install by hash or lockfile integrity.
 - Pull request descriptions list: what the PR does, the evidence, judgment calls (every place the spec was interpreted or a default taken), and known gaps. Reply to each review thread with the fixing commit and resolve it.
 - **Keep PRs small** enough to pass review in one round.
+- Bump versions in the same PR that ships the change (see VERSIONS.md if the project versions its skills).
 
 ## Local development integrations
 
