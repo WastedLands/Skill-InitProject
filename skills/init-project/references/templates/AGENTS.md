@@ -67,7 +67,7 @@ Delete the mode that does not apply, including its rules above.
 
 **Local gate before every push.** Two layers, kept distinct:
 
-- **Scaffold checks** (created by init-project, runnable now): placeholder scan, planning-mode validation. These are the only checks CI runs until the implementation gate exists.
+- **Scaffold checks** (created by init-project as `.github/workflows/scaffold.yml`, runnable now): placeholder scan, planning-mode validation. These are the only checks CI runs until the implementation gate exists.
 - **Implementation checks** (proposed, not yet created): the application's own lint/type/test gate. Add each check here and to CI in the same change that introduces it. Until then, this section names the gate; it does not claim it exists.
 
 ## Architecture

@@ -12,7 +12,7 @@ The skill ships its templates under `skills/init-project/references/`:
 
 ```
 skills/init-project/
-  SKILL.md                 # the skill (spec-pure frontmatter; works in any harness)
+  SKILL.md                 # the skill: six spec frontmatter fields + documented disable-model-invocation; works in any harness
   agents/openai.yaml       # Codex sidecar (explicit invocation only)
   references/              # templates + stack presets (loaded on demand)
 .claude-plugin/plugin.json # Claude Code plugin wrapper (name: wastedlands)

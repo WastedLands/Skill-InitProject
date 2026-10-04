@@ -1,6 +1,6 @@
 # Architecture: {{PROJECT_NAME}}
 
-What exists and runs today, plus the dated decisions in force. **This document follows the code**: the pull request that changes the architecture updates it. Nothing planned goes in it — plans live in `openspec/changes/` (OpenSpec mode) or `docs/DESIGN.md` (planning-lite mode); delete the inapplicable reference. The chosen stack is recorded in the active change's `design.md` until it is built; this file records what is actually running.
+What exists and runs today, plus the dated decisions in force. **This document follows the code**: the pull request that changes the architecture updates it. Nothing planned goes in it — plans live in `openspec/changes/` (OpenSpec mode) or `docs/DESIGN.md` (planning-lite mode); delete the inapplicable reference. The chosen stack is recorded in the active change's `design.md` (OpenSpec mode) or in `docs/DESIGN.md` (planning-lite mode) until it is built; this file records what is actually running.
 
 ## Overview
 

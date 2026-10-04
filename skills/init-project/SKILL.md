@@ -88,6 +88,7 @@ Proceed after the owner approves. If they counter-propose, adopt theirs and adju
 Before generating anything, present the exact file inventory for approval:
 
 - Every file to be created (with its planning-mode branch: `openspec/` vs `docs/DESIGN.md`).
+- `.github/workflows/scaffold.yml` — scaffold checks (placeholder scan; OpenSpec validation in OpenSpec mode only).
 - `LICENSE` (per the interview's license choice), `.gitignore` (stack-appropriate subset).
 - Visibility for the GitHub repo step (private/public per the interview).
 - If project skills were requested: the concrete outputs — canonical `.claude/skills/<name>/`, mirror `.agents/skills/<name>/`, and a `skills.lock.json` entry — plus how consistency is checked.
@@ -107,7 +108,8 @@ Generate the approved files. Fill every `{{PLACEHOLDER}}` in the templates; dele
 5. `LICENSE` — per the interview (default MIT).
 6. `.gitignore` — from `references/templates/gitignore-patterns.md`, stack-appropriate subset plus project-specific patterns. Must retain vendored skill dirs (`.claude/skills/`, `.agents/skills/`) when skills were requested.
 7. `README.md` — one-paragraph pitch, status, pointer to `AGENTS.md` and `docs/`. Keep it short; it is not the spec.
-8. If project skills were requested: scaffold the canonical skill, the harness mirror, and the `skills.lock.json` entry per the vendoring convention.
+8. `.github/workflows/scaffold.yml` — from `references/templates/github-workflows/scaffold.yml`. In planning-lite mode, delete the `OPENSPEC-ONLY` step.
+9. If project skills were requested: scaffold the canonical skill, the harness mirror, and the `skills.lock.json` entry per the vendoring convention.
 
 After writing, validate: `grep -r "{{" --include="*.md" .` must be empty (no unfilled placeholders). OpenSpec mode: `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 validate --all --strict` must pass (note: it passes vacuously on an empty scaffold — say so; it establishes structure, not behavior).
 

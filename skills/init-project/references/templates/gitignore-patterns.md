@@ -30,12 +30,14 @@ Precise patterns only. Broad globs like `*secret*` or `*credentials*` hide legit
 
 ## Agent harness local state (always)
 
-Keep vendored skills, ignore the rest. Use the `/*` form (not a trailing slash): excluding the bare directory (`.claude/`) stops git from ever descending into it, so the negations below would silently fail. The negations re-include the canonical skill dirs and their mirrors; everything else harness-local stays out.
+Keep vendored skills and shared commands, ignore the rest. Use the `/*` form (not a trailing slash): excluding the bare directory (`.claude/`) stops git from ever descending into it, so the negations below would silently fail. The negations re-include the canonical skill dirs, their mirrors, and shared command dirs (including OpenSpec-generated `/opsx:*` commands under `.claude/commands/`); everything else harness-local stays out.
 
 ```
 .claude/*
 !.claude/skills/
 !.claude/skills/**
+!.claude/commands/
+!.claude/commands/**
 .codex/
 .mcp.json
 .agents/*
