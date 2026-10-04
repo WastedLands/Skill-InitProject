@@ -1,0 +1,7 @@
+interface:
+  display_name: Init Project
+  short_description: Interview-driven scaffolding for new software projects
+policy:
+  # This skill runs a heavyweight interactive interview. It must never
+  # auto-fire; the user invokes it explicitly with $init-project.
+  allow_implicit_invocation: false

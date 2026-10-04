@@ -1,0 +1,19 @@
+# TODO: pin GitHub-owned actions to full commit SHAs before publishing
+# (repo convention: no floating tags, no third-party actions).
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  skills-ref:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npx -y skills-ref validate skills/init-project
+      - run: node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/plugin.json','utf8')); JSON.parse(require('fs').readFileSync('plugin.json','utf8')); console.log('plugin manifests parse OK')"
+      - run: node -e "const s=require('fs').readFileSync('skills/init-project/agents/openai.yaml','utf8'); if(!s.includes('allow_implicit_invocation: false')) throw new Error('openai.yaml policy changed'); console.log('openai.yaml policy OK')"
