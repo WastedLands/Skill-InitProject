@@ -43,7 +43,7 @@ npx -y skills-ref validate skills/init-project  # advisory only
 claude plugin validate --strict .            # Claude packaging (local)
 ```
 
-`skills-ref` flags `disable-model-invocation` as an unexpected frontmatter field. That field is Claude-Code-documented and intentional — it mirrors Codex's `allow_implicit_invocation: false` so this heavyweight interview skill never auto-fires. Our validator is the hard gate; `skills-ref` stays advisory.
+`skills-ref` flags `disable-model-invocation` as an unexpected frontmatter field. That field is Claude-Code-documented and intentional — it mirrors Codex's `allow_implicit_invocation: false` so this heavyweight interview skill never auto-fires. Every other frontmatter field stays within the six-field Agent Skills spec. Our validator is the hard gate; `skills-ref` stays advisory.
 
 CI runs the hard gate. Before publishing, also do the manual round-trips: install from a local-path marketplace in Claude Code, and the marketplace-add round-trip in a throwaway Codex home.
 

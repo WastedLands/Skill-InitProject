@@ -14,11 +14,19 @@ How to run, test, and check things locally. If a command here disagrees with `AG
 
 ## Local gate
 
+Scaffold checks (runnable now):
+
+```bash
+{{SCAFFOLD_GATE_COMMANDS}}
+```
+
+Implementation checks (proposed — add the real commands with the first implementation slice, and mirror them in CI):
+
 ```bash
 {{GATE_COMMANDS}}
 ```
 
-Run before every push. CI runs the same checks.
+Run the runnable checks before every push. Do not claim CI runs checks that don't exist yet.
 
 ## Gotchas and lessons learned
 

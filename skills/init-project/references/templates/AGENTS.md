@@ -21,29 +21,34 @@ If code must diverge from the spec, record why in `docs/decisions/` and update t
 
 ## How the project is planned
 
-Two modes; the interview picks one and the other block is deleted.
+Two modes; the interview picks one and the other mode's block is deleted.
 
-### Mode A — OpenSpec (default)
+### Shared docs (both modes)
 
 - `docs/NORTH-STAR.md`: the end goal and the principles that do not change.
 - `docs/ROADMAP.md`: numbered phases. Past and current phases are committed. Every future phase is direction and may be rewritten by the pull request that learns something.
-- `openspec/specs/`: what the product does today, per capability, as requirements with WHEN/THEN scenarios. A spec describes current truth plus the active phase's delta, never a future phase. Every scenario ends with an `*Evidence:*` line naming the test that proves it, or `none yet` when nothing proves it yet.
-- `openspec/changes/<name>/`: the active phase's work. The spec delta is **what** it builds; `design.md` and `tasks.md` are **how**; the `tasks.md` checkboxes are its status. Archiving merges the delta into the specs.
 - `docs/ARCHITECTURE.md`: what exists and runs today, plus the dated decisions in force. It follows the code: the pull request that changes the architecture updates it. Nothing planned goes in it.
 - `docs/DEVELOPMENT.md`: how to run and check things locally, plus a dated log of gotchas and lessons learned. Add an entry whenever something surprises you or costs time.
+
+Rules for both modes:
+
+- **No document references a historical document** or says what it was derived from. Git history is the provenance. Folded-in files are deleted, not archived.
+- **Future phases are not promises.** Reorder, rescope, or drop them in the pull request that learns why.
+
+### Mode A — OpenSpec (default)
+
+- `openspec/specs/`: what the product does today, per capability, as requirements with WHEN/THEN scenarios. A spec describes current truth plus the active phase's delta, never a future phase. Every scenario ends with an `*Evidence:*` line naming the test that proves it, or `none yet` when nothing proves it yet.
+- `openspec/changes/<name>/`: the active phase's work. The spec delta is **what** it builds; `design.md` and `tasks.md` are **how**; the `tasks.md` checkboxes are its status. Archiving merges the delta into the specs.
 
 Rules that follow from this:
 
 - **The active change's spec is the implementer's contract.** Do not drift from it silently, and do not refuse work because of it: when the code or a discovery contradicts it, propose a spec change (edit the delta, then the design and tasks) and say so in the pull request under judgment calls.
 - **A spec change updates the plan.** If the delta changes, `design.md` and `tasks.md` change in the same commit. When a revision touches behaviour that is already implemented, uncheck the affected tasks and add the task that re-proves the new behaviour; a checked box is a claim that the current spec is met.
 - **Archiving records completion, it does not establish it.** Archive a change only when every task is checked, the local gate and CI are green, and the delta is synced into the specs. Delete an abandoned change instead of archiving it.
-- **No document references a historical document** or says what it was derived from. Git history is the provenance. Folded-in files are deleted, not archived.
-- **Future phases are not promises.** Reorder, rescope, or drop them in the pull request that learns why.
 
 ### Mode B — Planning-lite (small projects)
 
 - `docs/DESIGN.md`: the single design doc — authoritative for scope, contracts, semantics, limits, and acceptance criteria. Keep it current; it rots the moment it disagrees with the code.
-- `docs/NORTH-STAR.md`, `docs/ROADMAP.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md`: as in Mode A.
 
 Delete the mode that does not apply, including its rules above.
 
@@ -60,7 +65,10 @@ Delete the mode that does not apply, including its rules above.
 {{DEPLOY_COMMAND}}       # only ever run when explicitly authorized
 ```
 
-**Local gate before every push.** CI runs the same checks. When a new check is added, add it here and to CI in the same change.
+**Local gate before every push.** Two layers, kept distinct:
+
+- **Scaffold checks** (created by init-project, runnable now): placeholder scan, planning-mode validation. These are the only checks CI runs until the implementation gate exists.
+- **Implementation checks** (proposed, not yet created): the application's own lint/type/test gate. Add each check here and to CI in the same change that introduces it. Until then, this section names the gate; it does not claim it exists.
 
 ## Architecture
 

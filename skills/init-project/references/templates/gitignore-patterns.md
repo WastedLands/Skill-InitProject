@@ -22,24 +22,28 @@ Precise patterns only. Broad globs like `*secret*` or `*credentials*` hide legit
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
 *.pem
 *.key
 ```
 
 ## Agent harness local state (always)
 
-Keep vendored skills, ignore the rest. The negations below re-include the canonical skill dirs and their mirrors; everything else harness-local stays out.
+Keep vendored skills, ignore the rest. Use the `/*` form (not a trailing slash): excluding the bare directory (`.claude/`) stops git from ever descending into it, so the negations below would silently fail. The negations re-include the canonical skill dirs and their mirrors; everything else harness-local stays out.
 
 ```
-.claude/
+.claude/*
 !.claude/skills/
 !.claude/skills/**
 .codex/
 .mcp.json
-.agents/
+.agents/*
 !.agents/skills/
 !.agents/skills/**
 ```
+
+OpenSpec-managed tool dirs (installed by `openspec init --tools`) are generated files — commit them intentionally; they are versioned with the CLI that generated them.
 
 If the project intentionally commits a repo-scoped marketplace or other harness config, un-ignore that path explicitly with a comment saying why.
 

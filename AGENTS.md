@@ -18,9 +18,10 @@ Working instructions for coding agents in this repository.
 ## Commands
 
 ```bash
-node scripts/validate-skill.mjs            # spec + repo conventions (hard gate)
-node scripts/validate-skill.mjs --strict   # warnings become errors
-npx -y skills-ref validate skills/init-project  # advisory: flags disable-model-invocation (intentional, see below)
+npm ci --no-audit --no-fund            # install devDependencies (js-yaml for the validator)
+node scripts/validate-skill.mjs        # spec + repo conventions (hard gate)
+node scripts/validate-skill.mjs --strict  # warnings become errors
+npx -y skills-ref@0.1.5 validate skills/init-project  # advisory: flags disable-model-invocation (intentional, see below)
 ```
 
 ## Conventions

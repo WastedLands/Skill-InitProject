@@ -1,5 +1,4 @@
-# TODO: pin GitHub-owned actions to full commit SHAs before publishing
-# (repo convention: no floating tags, no third-party actions).
+# Repo convention: GitHub-owned actions pinned to full commit SHAs, no third-party actions.
 name: validate
 
 on:
@@ -10,16 +9,18 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
-      # Hard gate: Agent Skills spec + repo conventions.
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      # Hard gate: Agent Skills spec (real YAML parser) + repo conventions.
       - run: node scripts/validate-skill.mjs --strict
       # Advisory: the official spec validator flags `disable-model-invocation`
       # as an unexpected field. That field is Claude-Code-documented and
       # intentional (symmetric with Codex's allow_implicit_invocation: false),
       # so this step is informational only.
-      - run: npx -y skills-ref validate skills/init-project
+      - run: npx -y skills-ref@0.1.5 validate skills/init-project
         continue-on-error: true
       - run: node -e "JSON.parse(require('fs').readFileSync('.claude-plugin/plugin.json','utf8')); JSON.parse(require('fs').readFileSync('plugin.json','utf8')); console.log('plugin manifests parse OK')"
