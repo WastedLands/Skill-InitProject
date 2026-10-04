@@ -17,9 +17,25 @@ jobs:
           node-version: 24
       - name: No unfilled placeholders
         run: |
-          if grep -rE '\{\{[A-Z][A-Z0-9_]*\}\}' --include='*.md' . | grep -v '{{PLACEHOLDER}}'; then
-            echo "unfilled placeholders found"; exit 1
+          # grep exit 1 = no matches (clean). Any other non-zero exit is a
+          # scan failure and must propagate — never silently pass.
+          if grep -rEn --include='*.md' --exclude-dir=.git --exclude-dir=node_modules '[{][{]' .; then
+            echo "Unfilled template placeholders found" >&2
+            exit 1
+          else
+            code=$?
+            if [ "$code" -ne 1 ]; then
+              echo "Placeholder scan failed (grep exit $code)" >&2
+              exit "$code"
+            fi
           fi
-      # OPENSPEC-ONLY: delete this step in planning-lite mode.
+      # OPENSPEC-ONLY: delete the following two steps in planning-lite mode.
       - name: OpenSpec validate
         run: OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 validate --all --strict
+      - name: OpenSpec config health
+        run: |
+          # doctor exits 0 even when it silently ignores malformed config rules
+          # (e.g. an unquoted ": " turning a rule into a mapping). It reports
+          # those on stderr instead — any stderr output fails this step.
+          err=$(OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 doctor --json 2>&1 1>/dev/null)
+          if [ -n "$err" ]; then echo "$err" >&2; exit 1; fi

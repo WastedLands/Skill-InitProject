@@ -22,8 +22,6 @@ Precise patterns only. Broad globs like `*secret*` or `*credentials*` hide legit
 .env
 .env.*
 !.env.example
-.dev.vars
-.dev.vars.*
 *.pem
 *.key
 ```
@@ -75,6 +73,8 @@ venv/
 
 ```
 .wrangler/
+.dev.vars
+.dev.vars.*
 ```
 
 ## OpenSpec working notes (keep specs, ignore scratch)

@@ -30,7 +30,18 @@ claude plugin install wastedlands@wastedlands
 
 Then run `/wastedlands:init-project`.
 
-**Codex**: copy or symlink `skills/init-project` into `~/.agents/skills/` (or a repo's `.agents/skills/`), then run `$init-project`. (Codex reads the open Agent Skills format natively; no extra packaging needed.)
+**Codex** (via the same marketplace):
+
+```bash
+codex plugin marketplace add WastedLands/Skills
+codex plugin add wastedlands@wastedlands
+```
+
+Then run `$wastedlands:init-project` (plugin-namespaced — tested on Codex CLI).
+
+**Codex, standalone** (no plugin): copy or symlink `skills/init-project` into `~/.agents/skills/` (or a repo's `.agents/skills/`), then run `$init-project`. (Codex reads the open Agent Skills format natively; no extra packaging needed.)
+
+> These repos are private for now. Both CLIs add the marketplace over git, so authenticate first: `gh auth login`, or an SSH key with access to the org (`ssh -T git@github.com` should greet you). If a marketplace add fails with an auth error, check git's GitHub access before anything else.
 
 **skills.sh**: listing is seeded after testing — not yet.
 

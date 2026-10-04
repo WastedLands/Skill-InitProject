@@ -4,9 +4,13 @@ Current versions of all skills. Agents can compare against local versions to che
 
 | Skill | Version | Last updated |
 |---|---|---|
-| init-project | 0.1.0 | 2026-10-04 |
+| init-project | 0.2.0 | 2026-10-04 |
 
 ## Changelog
+
+### 0.2.0 — 2026-10-04
+
+Review-driven hardening after full private interview tests on Claude Code CLI and Codex CLI: methodology preservation requirements in Phase 5 (mandatory vs project-specific vs optional content, coverage review against the master template); Common/Secrets/harness-state gitignore sections mandatory with pre-commit verification; `openspec doctor --json` stderr gate in scaffold workflow and Phase 5 validation (catches malformed config rules that `validate` silently ignores); robust placeholder scan (propagates grep errors, no exclusion pipeline); `CLAUDE.md` bridge as a standard inventory item; `.dev.vars*` moved to the Cloudflare/Wrangler section; READMEs document the tested `$wastedlands:init-project` invocation and private-repo git auth.
 
 ### 0.1.0 — 2026-10-04
 

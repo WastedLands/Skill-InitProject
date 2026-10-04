@@ -6,7 +6,7 @@ license: MIT
 compatibility: Requires git and node/npx. The gh CLI is required for GitHub repo creation. OpenSpec is bootstrapped via npx (@fission-ai/openspec).
 metadata:
   author: WastedLands
-  version: 0.1.0
+  version: 0.2.0
 disable-model-invocation: true
 ---
 
@@ -87,8 +87,8 @@ Proceed after the owner approves. If they counter-propose, adopt theirs and adju
 
 Before generating anything, present the exact file inventory for approval:
 
-- Every file to be created (with its planning-mode branch: `openspec/` vs `docs/DESIGN.md`).
-- `.github/workflows/scaffold.yml` — scaffold checks (placeholder scan; OpenSpec validation in OpenSpec mode only).
+- Every file to be created (with its planning-mode branch: `openspec/` vs `docs/DESIGN.md`). When Claude is a selected harness, include the `CLAUDE.md` bridge (`@AGENTS.md` one-liner).
+- `.github/workflows/scaffold.yml` — scaffold checks (placeholder scan; OpenSpec validation + config health in OpenSpec mode only).
 - `LICENSE` (per the interview's license choice), `.gitignore` (stack-appropriate subset).
 - Visibility for the GitHub repo step (private/public per the interview).
 - If project skills were requested: the concrete outputs — canonical `.claude/skills/<name>/`, mirror `.agents/skills/<name>/`, and a `skills.lock.json` entry — plus how consistency is checked.
@@ -99,19 +99,31 @@ Proceed only after the owner approves the inventory.
 
 Generate the approved files. Fill every `{{PLACEHOLDER}}` in the templates; delete unused `<!-- OPTIONAL -->` blocks rather than leaving them. Never leave a placeholder unfilled.
 
-1. `AGENTS.md` — from `references/templates/AGENTS.md`. Delete the planning-mode block that does not apply (OpenSpec vs lite).
+**Methodology preservation.** The master template (`references/templates/AGENTS.md`) encodes a methodology, not just a format. When adapting it, distinguish three kinds of content:
+
+- **Mandatory methodology** — preserve every applicable rule, adapting wording to the project but never dropping the rule: ordered source of truth; spec-is-contract and spec-change-updates-plan; archiving semantics; git-history-as-provenance; vertical slices; schema/fixture first; tests as the definition of done; test-first with the failure shown; E2E preference with evidence lines; failure-modes-before-isolated-unit-tests; numbered decision records; archaeology-vs-evidence distinction; per-task workflow; small PRs; secrets fail-closed. If a mandatory rule genuinely does not apply, propose the omission in the output inventory and get approval — never silently drop it.
+- **Project-specific** — pitch, hard rules, stack, commands, invariants: generated from the interview.
+- **Optional** — skills vendoring, content rules, acceptance matrix: include only when the interview calls for them.
+
+After generation, do a final coverage review: walk the master template section by section and confirm every mandatory rule is present in the generated `AGENTS.md` or has an approved omission.
+
+1. `AGENTS.md` — from `references/templates/AGENTS.md`. Delete the planning-mode block that does not apply (OpenSpec vs lite). When Claude is among the selected harnesses, also write `CLAUDE.md` as a one-line `@AGENTS.md` bridge so Claude Code reads the same instructions.
 2. `docs/NORTH-STAR.md`, `docs/ROADMAP.md` — from templates, reconciled with interview + drafts.
 3. `docs/ARCHITECTURE.md`, `docs/DEVELOPMENT.md` — skeleton with the "follows the code" rule and a seeded gotchas log.
 4. Planning mode branch:
    - **OpenSpec:** run `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 init --tools <harnesses>` (harnesses from the interview, e.g. `claude,codex,agents`; pin the version as shown). Then ensure `openspec/config.yaml` references `docs/NORTH-STAR.md` as the vision source rather than duplicating it.
    - **Lite:** generate `docs/DESIGN.md` from `references/templates/DESIGN.md`. No `openspec/` directory.
 5. `LICENSE` — per the interview (default MIT).
-6. `.gitignore` — from `references/templates/gitignore-patterns.md`, stack-appropriate subset plus project-specific patterns. Must retain vendored skill dirs (`.claude/skills/`, `.agents/skills/`) when skills were requested.
+6. `.gitignore` — from `references/templates/gitignore-patterns.md`. The Common, Secrets, and harness-state sections are mandatory; stack selection applies only to the remaining sections. Do not paraphrase or trim the mandatory sections.
 7. `README.md` — one-paragraph pitch, status, pointer to `AGENTS.md` and `docs/`. Keep it short; it is not the spec.
 8. `.github/workflows/scaffold.yml` — from `references/templates/github-workflows/scaffold.yml`. In planning-lite mode, delete the `OPENSPEC-ONLY` step.
 9. If project skills were requested: scaffold the canonical skill, the harness mirror, and the `skills.lock.json` entry per the vendoring convention.
 
-After writing, validate: `grep -r "{{" --include="*.md" .` must be empty (no unfilled placeholders). OpenSpec mode: `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 validate --all --strict` must pass (note: it passes vacuously on an empty scaffold — say so; it establishes structure, not behavior).
+After writing, validate:
+
+- **Placeholders:** no `{{` may remain in any `*.md` file. Scan with the same robust check the generated workflow uses: `grep` exit 1 means clean; any other non-zero exit is a scan failure and must propagate (never filter matches through an exclusion pipeline).
+- **Gitignore:** `git check-ignore` confirms secret patterns are ignored; `git ls-files` (after staging) confirms vendored skills/commands are trackable.
+- **OpenSpec mode:** `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 validate --all --strict` must pass (note: it passes vacuously on an empty scaffold — say so; it establishes structure, not behavior). Then `OPENSPEC_TELEMETRY=0 npx -y @fission-ai/openspec@1.14.0 doctor --json` must produce **no stderr output**: both `validate` and `doctor` exit 0 while silently ignoring malformed config rules (e.g. an unquoted `: ` turning a rule into a mapping), and `doctor` reports those on stderr instead.
 
 ### Phase 6 — Git & GitHub (gated)
 
